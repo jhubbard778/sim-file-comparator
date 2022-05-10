@@ -79,12 +79,13 @@ int main(int argc, char **argv) {
 		}
 	}
 
+	//		4. Free each element in the string array
 	for (int i = 0; i < total_lines_original; i++) {
 		free(original_file_strings[i]);
 	}
 
 
-	//       5. Clean up!
+	//       5. Clean up the rest
 	free(original_file_strings);
 	free(origin_lineptr);
 	free(race_event_lineptr);
@@ -114,12 +115,19 @@ void parse_line(char *line) {
 	stringp[strlen(stringp) - 1] = '\0';
 	
 	char *bracketptr = stringp;
+	// keep moving the pointer forward by 1 until we reach the end bracket
 	while (bracketptr != strstr(bracketptr, "]"))
 		bracketptr++;
 	int index = bracketptr - stringp + 1;
+
+	// duplicate the coords including end bracket
 	char *coords = strndup(stringp, index);
+	// add commas
 	coords = fix_coords(coords);
+	// output coords
 	fprintf(outjson, "{\n\tcoords: %s,\n\t", coords);
+
+	// move string pointer by 1
 	stringp += index + 1;
 
 	char *token = NULL;
