@@ -127,7 +127,7 @@ void parse_line(char *line) {
 	// output coords
 	fprintf(outjson, "{\n\tcoords: %s,\n\t", coords);
 
-	// move string pointer by 1
+	// move string pointer by 1 after index
 	stringp += index + 1;
 
 	char *token = NULL;
@@ -139,19 +139,19 @@ void parse_line(char *line) {
 		fprintf(outjson, "aspect: %s,\n\t", token);
 
 		token = strsep(&stringp, " ");
-		fprintf(outjson, "png: %s\n", token);
+		fprintf(outjson, "png: \"%s\"\n", token);
 	} else {
 		token = strsep(&stringp, " ");
 		fprintf(outjson, "angle: %s,\n\t", token);
 
 		token = strsep(&stringp, " ");
-		fprintf(outjson, "jm: %s,\n\t", token);
+		fprintf(outjson, "jm: \"%s\",\n\t", token);
 
 		token = strsep(&stringp, " ");
-		fprintf(outjson, "png: %s,\n\t", token);
+		fprintf(outjson, "png: \"%s\",\n\t", token);
 
 		token = strsep(&stringp, " ");
-		fprintf(outjson, "shp: %s\n", token);
+		fprintf(outjson, "shp: \"%s\"\n", token);
 	}
 
 	fprintf(outjson, "},\n");
