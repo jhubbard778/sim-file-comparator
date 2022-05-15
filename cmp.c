@@ -72,11 +72,21 @@ int main(int argc, char **argv) {
 	while (getline(&race_event_lineptr, &race_event_size, check_fp) != -1) {
 
 		// search original file strings
-		char *result = lfind(race_event_lineptr, original_file_strings, &total_lines_original, sizeof(char*), comparator);
+		char **result = lfind(race_event_lineptr, original_file_strings, &total_lines_original, sizeof(char*), comparator);
 		
-		if (!result) {
-			parse_line(race_event_lineptr);
+		if (result) {
+			// get index and splice it from the original lines array
+			int index = result - original_file_strings;
+			free(original_file_strings[index]);
+			for (int i = index; i < total_lines_original - 1; i++) original_file_strings[i] = original_file_strings[i + 1];
+        	total_lines_original--;
+
+			// reallocate the array
+			original_file_strings = realloc(original_file_strings, sizeof(char*) * (total_lines_original + 1));
+			continue;
 		}
+
+		parse_line(race_event_lineptr);
 	}
 
 	//		4. Free each element in the string array
